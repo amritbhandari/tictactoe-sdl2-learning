@@ -231,6 +231,7 @@ void RenderPlayAgainText()
 void ResetGame()
 {
     currentPlayer = PLAYER_X;
+    winner = NONE;
     gridsEmpty = 9;
 
     for (int i = 0; i < GRID_SIZE; i++)
@@ -261,8 +262,11 @@ void handleEvents()
                     currentPlayer = (currentPlayer == PLAYER_X) // switch current player
                                         ? PLAYER_O
                                         : PLAYER_X;
-
                     gridsEmpty--;
+                    if (Player w = checkWinner(); w != NONE || gridsEmpty == 0)
+                    {
+                        winner = w;
+                    }
                 }
             }
             break;
@@ -323,9 +327,9 @@ int main()
 
             SDL_RenderPresent(renderer);
 
-            if (checkWinner() != NONE || gridsEmpty == 0)
+            if (winner != NONE)
             {
-                SDL_Delay(1500);
+                SDL_Delay(1000);
                 continueGame = false;
             }
         }
